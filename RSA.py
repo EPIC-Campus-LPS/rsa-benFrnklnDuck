@@ -18,14 +18,14 @@ while millerrabin.is_prime(rand_num) == False:
     rand_num = randNum.random(upper, lower)
 
 p = rand_num
-#print(p)
+#print(p, "p")
 
 rand_num = randNum.random(upper, lower)
 while millerrabin.is_prime(rand_num) == False or rand_num == p:
     rand_num = randNum.random(upper, lower)
 
 q = rand_num
-#print(q)
+#print(q, "q")
 
 n = p*q
 
@@ -49,22 +49,44 @@ message = input("What is the message you would like to encrypt? ")
 #encrypt: C = m^e % n
 #decrypt: m = C^d % n
 msg = 0
+C = 0
+m = 0
 
 try:
     msg = int(message)
-    print("int")
+    #print("int")
+    C = gmpy2.powmod(msg, e, n)
+    m = gmpy2.powmod(C, d, n)
+    print("Encrypted message: " + str(C))
+    print("Decrypted message: " + str(m))
+
 except ValueError:
+    m = ""
     for i in message:
         ascii = ord(i.upper())
-    #print(ascii)
-        msg = msg * 100
-        msg += ascii
-    #print(msg)
+        tempC = gmpy2.powmod(ascii, e, n)
+        tempm = gmpy2.powmod(tempC, d, n)
+        #print(ascii, tempC, tempm)
+        C *= len(str(tempC))
+        C += tempC
+        m += str(tempm)
+    strm = ""
+    print (m, C)
 
-C = gmpy2.powmod(msg, e, n)
-m = gmpy2.powmod(C, d, n)
+    m = str(m)
+    while len(m) > 1:
+        l = m[-2:]
+        #print(l, "l")
+        l = int(l)
+        strm = chr(l) + strm
+        #print(strm)
+        m = m[:-2]
+        #print(m, "m")
+    print("Encrypted message: " + str(C))
+    print("Decrypted message: " + strm)   
+    
 
-print(msg)
+#C = gmpy2.powmod(msg, e, n)
+#m = gmpy2.powmod(C, d, n)
 
-print("Encrypted message: " + str(C))
-print("Decrypted message: " + str(m))
+#print(msg)
